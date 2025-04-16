@@ -16,54 +16,41 @@
     </form>
 
     <script>
-        // Login form submit handler
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Send login request to backend
             fetch('https://metabase-backend-production.up.railway.app/api/login', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email, password })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.dashboardUrl) {
-        // Redirect or embed dashboard
-        window.location.href = data.dashboardUrl;
-    } else {
-        alert(data.message || 'Login failed');
-    }
-})
-.catch(error => {
-    console.error('Error during login:', error);
-    alert('Network error. Please try again.');
-});
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.token) {
-                    // Store the JWT token in localStorage or a cookie
+                    // Save JWT
                     localStorage.setItem('jwt_token', data.token);
 
-                    // Decode the JWT to extract the dashboard URL
-                    const jwtPayload = JSON.parse(atob(data.token.split('.')[1])); // Decode JWT payload
-
-                    // Get the dashboard URL from the JWT payload
+                    // Decode JWT payload to get dashboard URL
+                    const jwtPayload = JSON.parse(atob(data.token.split('.')[1]));
                     const dashboardUrl = jwtPayload.dashboard_url;
 
-                    // Redirect the user to the Metabase dashboard
-                    window.location.href = dashboardUrl;  // Redirect to Metabase dashboard
+                    if (dashboardUrl) {
+                        window.location.href = dashboardUrl;
+                    } else {
+                        alert('Dashboard URL not found.');
+                    }
                 } else {
-                    alert('Login failed');
+                    alert(data.message || 'Login failed');
                 }
             })
             .catch(error => {
-                console.error('Login failed:', error);
+                console.error('Error during login:', error);
+                alert('Network error. Please try again.');
             });
         });
     </script>
