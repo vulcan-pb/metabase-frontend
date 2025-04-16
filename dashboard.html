@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Dashboard</title>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+    iframe {
+      width: 100%;
+      height: 90vh;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Your Dashboard</h2>
+  <iframe id="metabaseIframe"></iframe>
+
+  <script>
+    const metabaseUrl = localStorage.getItem("metabaseUrl");
+
+    if (!metabaseUrl) {
+      alert("You're not logged in.");
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("metabaseIframe").src = metabaseUrl;
+    }
+  </script>
+</body>
+</html>
+
