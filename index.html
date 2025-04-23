@@ -22,17 +22,25 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            fetch('metabase-railway-production-ea23.up.railway.app', {
+            // Optional: show a loading message or indicator
+            document.body.innerHTML += '<p>Loading...</p>';
+
+            fetch('https://metabase-backend-production.up.railway.app/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email, password })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to login, please try again later.');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.token) {
-                    // Save JWT
+                    // Save JWT (or consider using sessionStorage)
                     localStorage.setItem('jwt_token', data.token);
 
                     // Decode JWT payload to get dashboard URL
@@ -50,7 +58,11 @@
             })
             .catch(error => {
                 console.error('Error during login:', error);
-                alert('Network error. Please try again.');
+                alert(error.message || 'Network error. Please try again.');
+            })
+            .finally(() => {
+                // Optional: hide loading message when finished
+                document.body.innerHTML = document.body.innerHTML.replace('<p>Loading...</p>', '');
             });
         });
     </script>
