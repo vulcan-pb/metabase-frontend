@@ -67,7 +67,7 @@
 
         const data = await res.json();
         if (data.dashboard_url) {
-          localStorage.setItem('metabaseUrl', data.dashboard_url);
+          localStorage.setItem('dashboardUrl', data.dashboard_url);
           window.location.href = 'dashboard.html';
         } else {
           document.getElementById('message').textContent = data.error || 'Login failed';
