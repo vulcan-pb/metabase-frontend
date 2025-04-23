@@ -20,13 +20,13 @@
   <iframe id="metabaseIframe"></iframe>
 
   <script>
-    const metabaseUrl = localStorage.getItem("dashboardUrl");
+    const dashboardUrl = localStorage.getItem("dashboardUrl");
 
-    if (!metabaseUrl) {
+    if (!dashboardUrl) {
       alert("You're not logged in.");
       window.location.href = "index.html";
     } else {
-      document.getElementById("metabaseIframe").src = metabaseUrl;
+      document.getElementById("metabaseIframe").src = dashboardUrl;
     }
   </script>
 </body>
